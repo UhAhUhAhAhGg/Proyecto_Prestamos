@@ -1,65 +1,136 @@
-<x-guest-layout>
-    <x-authentication-card>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      background-color: #e6c972;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .login-container .header1 {
+      text-align: center;
+      color: #333333;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .login-container .form-group {
+      margin-bottom: 15px;
+    }
+
+    .login-container .form-group label {
+      font-weight: bold;
+      color: #333333;
+    }
+
+    .login-container .form-control {
+      border-radius: 50px;
+      padding: 10px 15px;
+    }
+
+    .login-container .btn-primary {
+      background-color: #2C76CE;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-weight: bold;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .login-container .btn-primary:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    .login-container .forgot-password {
+      display: block;
+      margin-top: 10px;
+      color: #007bff;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .login-container .forgot-password:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <h2 class="header1">Inicio de Sesión</h2>
+
+    <x-guest-layout>
+      <x-authentication-card>
         <x-slot name="logo">
-            <x-authentication-card-logo />
+          {{-- <x-authentication-card-logo /> --}}
         </x-slot>
 
         <x-validation-errors class="mb-4" />
 
         @session('status')
-            <div class="mb-4 font-medium text-sm text-green-600">
-                {{ $value }}
-            </div>
+        <div class="mb-4 font-medium text-sm text-green-600">
+          {{ $value }}
+        </div>
         @endsession
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
+        <form class="login-form" method="POST" action="{{ route('login') }}">
+          @csrf
 
-            <div>
-                <!-- EDITAS EL TITULO DE LOGIN DEL USUARIO -->
-                <h1>(EDITAR) TITULO LOGIN DE USUARIO</h1>
+          <div class="form-group">
+            <x-input id="email" class="form-control" placeholder="Correo Electrónico" type="email" name="email"
+              :value="old('email')" required autofocus autocomplete="username" />
+          </div>
 
-                <!-- LA LINEA EDITADA ES LA ORIGINAL -->
-                <!-- <x-label for="email" value="{{ __('Email') }}" /> -->
-                <x-label for="email" value="(EDITAR) Correo Electronico" />
+          <div class="form-group mt-4">
+            <x-input id="password" placeholder="Contraseña" class="form-control" type="password" name="password"
+              required autocomplete="current-password" />
+          </div>
 
-                <!-- Lo de abajo es la cajita -->
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            </div>
+          <div class="flex items-center justify-between mt-4">
+            <button type="submit" class="btn btn-primary">
+              {{ __('Iniciar Sesión') }}
+            </button>
+          </div>
 
-            <!-- AQUI PUEDES EDITAR ELPASSWORD -->
-            <div class="mt-4">
+          <div class="flex items-center justify-center mt-4">
+            @if (Route::has('password.request'))
+            <a class="forgot-password" href="{{ route('password.request') }}">
+              {{ __('¿Olvidaste tu contraseña?') }}
+            </a>
+            @endif
+          </div>
 
-                <!-- LA LINEA COMENTADA ERA EL COISTO de CONTRASEÑA -->
-                <!-- <x-label for="password" value="{{ __('Password') }}" -->
-                <x-label for="password" value="Contraseña (Editar)" />
-
-                <x-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="current-password" />
-            </div>
-
-            <div class="block mt-4">
-                <label for="remember_me" class="flex items-center">
-                    <x-checkbox id="remember_me" name="remember" />
-                    
-                    <!-- AQUI VA EL RECUERDME: ORIGINAL Linea Comentada -->
-                    <!-- <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span> -->
-                    <span class="ms-2 text-sm text-gray-600">(EDITAR)Recuerdame</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    <!-- Parte Comentada es la original -->
-                        <!-- {{ __('Forgot your password?') }} -->
-                        {{ __('(EDITAR) (Olvidaste tu contraseña)? ') }}
-                    </a>
-                @endif
-
-                <x-button class="ms-4">
-                    {{ __('Log in') }}
-                </x-button>
-            </div>
+          <div class="flex items-center justify-center mt-4">
+            <a class="forgot-password" href="{{ url('/#') }}">
+              {{ __('Volver') }}
+            </a>
+          </div>
         </form>
-    </x-authentication-card>
-</x-guest-layout>
+      </x-authentication-card>
+    </x-guest-layout>
+  </div>
+</body>
+
+</html>

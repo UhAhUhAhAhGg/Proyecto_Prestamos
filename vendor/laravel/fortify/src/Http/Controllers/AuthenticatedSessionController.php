@@ -57,10 +57,21 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        return $this->loginPipeline($request)->then(function ($request) {
+        $response = $this->loginPipeline($request)->then(function ($request) {
             return app(LoginResponse::class);
         });
+    
+        if ($request->user()->usertype === 'admin') {
+            return redirect('admin/dashboard');
+        }
+
+        if ($request->user()->usertype === 'admin') {
+            return redirect('profile/navigation-menu');
+        }
+    
+        return $response;
     }
+    
 
     /**
      * Get the authentication pipeline instance.
